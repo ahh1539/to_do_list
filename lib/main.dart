@@ -3,18 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(HomePage());
 
-class ToDoList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: "ToDo List",
-      home: HomePage(),
-      theme: ThemeData.light(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -28,12 +16,14 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final TextEditingController _textEditingController =
       new TextEditingController();
+  bool isSwitched = false;
 
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: "ToDo List",
       theme: current,
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         key: _scaffoldKey,
         appBar: new AppBar(
@@ -43,7 +33,10 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: new Container(
-          child: ListView.builder(
+          child: ListView.separated(
+            separatorBuilder: (context, index) => Divider(
+              color: Colors.black,
+            ),
             itemCount: items.length,
             itemBuilder: (context, index) {
               return ListTile(
@@ -127,12 +120,17 @@ class _HomePageState extends State<HomePage> {
           title: Text('Settings'),
         ),
         body: new ListTile(
-          title: Text('Switch theme??'),
-          trailing: new IconButton(
-            icon: new Icon(Icons.ac_unit),
-            onPressed: () {
-              setTheme();
+          title: Text('Dark Theme'),
+          trailing: Switch(
+            value: isSwitched,
+            onChanged: (value) {
+              setState(() {
+                isSwitched = value;
+                setTheme();
+              });
             },
+            activeTrackColor: Colors.lightGreenAccent,
+            activeColor: Colors.green,
           ),
         ),
       );
