@@ -15,8 +15,10 @@ class _HomePageState extends State<HomePage> {
   List<Item> items = [Item("What will you get done today??")];
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final TextEditingController _textEditingController =
-      new TextEditingController();
+  new TextEditingController();
   bool isSwitched = false;
+
+  List<String> _storedItems = ["What will you get done today??"];
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +39,20 @@ class _HomePageState extends State<HomePage> {
             separatorBuilder: (context, index) => Divider(
               color: Colors.black,
             ),
-            itemCount: items.length,
+            itemCount: _storedItems.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(items[index].toString()),
-                trailing: new IconButton(
-                  icon: new Icon(Icons.delete),
-                  onPressed: () {
-                    _onDeleteItem(index);
-                  },
+              return Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: ListTile(
+                  title: Text(_storedItems[index], style: new TextStyle(fontSize: 18.0),),
+                  trailing: InkWell(
+                    child: new IconButton(
+                      icon: new Icon(Icons.delete, size: 18.0,),
+                      onPressed: () {
+                        _onDeleteItem(_storedItems[index]);
+                      },
+                    ),
+                  ),
                 ),
               );
             },
@@ -79,9 +86,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  _onDeleteItem(item) {
-    items.removeAt(item);
-    setState(() {});
+  _onDeleteItem(String item) {
+    _delete(item);
+    setState(() {
+      _storedItems = _storedItems;
+    });
   }
 
   _onEntered(String s) {
@@ -89,8 +98,10 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         if (items[0].toString().compareTo(start) == 0) {
           items.removeAt(0);
+          _storedItems.removeAt(0);
         }
         items.add(new Item(s));
+        _write(new Item(s));
         _textEditingController.clear();
       });
     }
@@ -136,6 +147,33 @@ class _HomePageState extends State<HomePage> {
       );
     });
   }
+
+  _write(Item item) async{
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'my_int_key';
+
+    if(prefs.getStringList(key) == null){
+      prefs.setStringList(key, _storedItems);
+    }
+    else{
+      _storedItems = prefs.getStringList(key);
+      _storedItems.add(item.toString());
+      prefs.setStringList(key, _storedItems);
+    }
+
+  }
+
+
+  _delete(String s) async{
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'my_int_key';
+    setState(() {
+      _storedItems.remove(s);
+      prefs.setStringList(key, _storedItems);
+    });
+  }
+
+
 }
 
 class Item {
