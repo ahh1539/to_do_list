@@ -1,3 +1,7 @@
+/**
+ * @author Alex Hurley
+ */
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,11 +18,12 @@ class _HomePageState extends State<HomePage> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final TextEditingController _textEditingController =
-  new TextEditingController();
+      new TextEditingController();
   bool isSwitched = false;
 
   List<String> _storedItems = ["What will you get done today??"];
 
+  // this builds the app, it is made up of the scaffold
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -30,25 +35,34 @@ class _HomePageState extends State<HomePage> {
         appBar: new AppBar(
           title: Text("ToDo List!"),
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.settings), onPressed: _pushSaved)
+            IconButton(icon: Icon(Icons.settings), onPressed: _toSettings)
           ],
         ),
         body: new Container(
+          // adds pull to refresh functionality to the app, underneath is a
+          // verticle scroll bar
           child: new RefreshIndicator(
             child: new Scrollbar(
               child: ListView.separated(
                 separatorBuilder: (context, index) => Divider(
-                  color: Colors.black,
-                ),
+                      color: Colors.black,
+                    ),
                 itemCount: _storedItems.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: ListTile(
-                      title: Text(_storedItems[index], style: new TextStyle(fontSize: 18.0),),
+                      title: Text(
+                        _storedItems[index],
+                        style: new TextStyle(fontSize: 18.0),
+                      ),
+                      // this adds the inkwell effect to the delete icon
                       trailing: InkWell(
                         child: new IconButton(
-                          icon: new Icon(Icons.delete, size: 18.0,),
+                          icon: new Icon(
+                            Icons.delete,
+                            size: 18.0,
+                          ),
                           onPressed: () {
                             _onDeleteItem(_storedItems[index]);
                           },
@@ -74,6 +88,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // when the floating action button is pressed this is the method that is triggered
+  // and handles all of the functionality, it displays a pop up text box for user input
   _onAddItemPressed() {
     _scaffoldKey.currentState.showBottomSheet<Null>((BuildContext context) {
       return new Container(
@@ -82,14 +98,16 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.fromLTRB(32.0, 50.0, 32.0, 32.0),
             child: TextField(
               controller: _textEditingController,
-              decoration: new InputDecoration.collapsed(
-                  hintText: "I want to...."),
+              decoration:
+                  new InputDecoration.collapsed(hintText: "I want to...."),
               onSubmitted: _onEntered,
             )),
       );
     });
   }
 
+  // this is called when the trailing icon is pressed, it is the functionality that
+  // removes the todo item from the storage and display
   _onDeleteItem(String item) {
     _delete(item);
     setState(() {
@@ -97,6 +115,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // this method is used when the user submits a new todo item, it clears
+  // the text box and removes the default todo item
   _onEntered(String s) {
     if (s.isNotEmpty) {
       setState(() {
@@ -109,6 +129,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // this is called when the user changes the theme is the settings
+  // simply changes from light -> dark mode and vice versa
   ThemeData setTheme() {
     if (current == ThemeData.light()) {
       setState(() {
@@ -125,7 +147,9 @@ class _HomePageState extends State<HomePage> {
     return ThemeData.light();
   }
 
-  void _pushSaved() {
+  // this is the method that displays the bottom drawer popup, it builds the content and
+  // displays it to the user, so far it has a switch to change the current theme
+  void _toSettings() {
     _scaffoldKey.currentState.showBottomSheet<Null>((BuildContext context) {
       return new Scaffold(
         appBar: new AppBar(
@@ -150,26 +174,25 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  _write(String item) async{
+  // this method saves the user input data into the local devices storage
+  _write(String item) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'my_int_key';
-    if(item.compareTo(" ") == 0){
+    if (item.compareTo(" ") == 0) {
       _storedItems = prefs.getStringList(key);
       prefs.setStringList(key, _storedItems);
-    }
-    else{
-      if(prefs.getStringList(key) == null){
+    } else {
+      if (prefs.getStringList(key) == null) {
         prefs.setStringList(key, _storedItems);
-      }
-      else{
+      } else {
         _storedItems = prefs.getStringList(key);
         _storedItems.add(item);
       }
     }
   }
 
-
-  _delete(String s) async{
+  // this method deletes the given string from the local devices storage
+  _delete(String s) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'my_int_key';
     setState(() {
@@ -178,13 +201,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> _refresh() async{
+  // this method refreshes the page and is called when the pull to refresh is activated
+  Future<void> _refresh() async {
     _write(" ");
     setState(() {
       _storedItems = _storedItems;
     });
   }
-
-
 }
-
