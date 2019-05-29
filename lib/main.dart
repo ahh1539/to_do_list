@@ -12,7 +12,6 @@ class _HomePageState extends State<HomePage> {
   String start = "What will you get done today??";
   ThemeData current = ThemeData.light();
 
-  List<Item> items = [Item("What will you get done today??")];
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final TextEditingController _textEditingController =
   new TextEditingController();
@@ -35,27 +34,32 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: new Container(
-          child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-              color: Colors.black,
-            ),
-            itemCount: _storedItems.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: ListTile(
-                  title: Text(_storedItems[index], style: new TextStyle(fontSize: 18.0),),
-                  trailing: InkWell(
-                    child: new IconButton(
-                      icon: new Icon(Icons.delete, size: 18.0,),
-                      onPressed: () {
-                        _onDeleteItem(_storedItems[index]);
-                      },
-                    ),
-                  ),
+          child: new RefreshIndicator(
+            child: new Scrollbar(
+              child: ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                  color: Colors.black,
                 ),
-              );
-            },
+                itemCount: _storedItems.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ListTile(
+                      title: Text(_storedItems[index], style: new TextStyle(fontSize: 18.0),),
+                      trailing: InkWell(
+                        child: new IconButton(
+                          icon: new Icon(Icons.delete, size: 18.0,),
+                          onPressed: () {
+                            _onDeleteItem(_storedItems[index]);
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            onRefresh: _refresh,
           ),
         ),
         floatingActionButton: new FloatingActionButton(
@@ -79,7 +83,7 @@ class _HomePageState extends State<HomePage> {
             child: TextField(
               controller: _textEditingController,
               decoration: new InputDecoration.collapsed(
-                  hintText: "Enter a Task to Complete"),
+                  hintText: "I want to...."),
               onSubmitted: _onEntered,
             )),
       );
@@ -96,12 +100,10 @@ class _HomePageState extends State<HomePage> {
   _onEntered(String s) {
     if (s.isNotEmpty) {
       setState(() {
-        if (items[0].toString().compareTo(start) == 0) {
-          items.removeAt(0);
+        if (_storedItems[0].compareTo(start) == 0) {
           _storedItems.removeAt(0);
         }
-        items.add(new Item(s));
-        _write(new Item(s));
+        _write(s);
         _textEditingController.clear();
       });
     }
@@ -148,19 +150,22 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  _write(Item item) async{
+  _write(String item) async{
     final prefs = await SharedPreferences.getInstance();
     final key = 'my_int_key';
-
-    if(prefs.getStringList(key) == null){
+    if(item.compareTo(" ") == 0){
+      _storedItems = prefs.getStringList(key);
       prefs.setStringList(key, _storedItems);
     }
     else{
-      _storedItems = prefs.getStringList(key);
-      _storedItems.add(item.toString());
-      prefs.setStringList(key, _storedItems);
+      if(prefs.getStringList(key) == null){
+        prefs.setStringList(key, _storedItems);
+      }
+      else{
+        _storedItems = prefs.getStringList(key);
+        _storedItems.add(item);
+      }
     }
-
   }
 
 
@@ -173,15 +178,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
-}
-
-class Item {
-  String title;
-  Item(String title) {
-    this.title = title;
+  Future<void> _refresh() async{
+    _write(" ");
+    setState(() {
+      _storedItems = _storedItems;
+    });
   }
 
-  @override
-  String toString() => "$title";
+
 }
+
