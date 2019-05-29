@@ -1,6 +1,8 @@
 # to_do_list
 
-A new Flutter application.
+This is a simple to-do list app that is being updated weekly. Use this app to help simplify your life 
+and keep your daily tasks organized. Feel free to reach out to me if you would like to work on this 
+project
 
 ## Getting Started
 
