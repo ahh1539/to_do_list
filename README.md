@@ -20,7 +20,7 @@ if you would like to work on this project. **Thanks and leave a star if you like
 - Make tasks reorderable with dragging
 
 
-
+<img src="https://im2.ezgif.com/tmp/ezgif-2-87d82f04be7f.gif" width="400" height="600" />
 
 ## Getting Started
 
