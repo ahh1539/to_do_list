@@ -4,7 +4,7 @@ This is a simple to-do list app that is being updated weekly. Use this app to he
 and keep your daily tasks organized. Feel free to reach out to me if you would like to work on this 
 project
 
-![](appgif.gif)
+![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
 
 ## Getting Started
 
