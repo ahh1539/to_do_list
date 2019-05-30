@@ -1,10 +1,26 @@
 # to_do_list
 
-This is a simple to-do list app that is being updated weekly. Use this app to help simplify your life 
-and keep your daily tasks organized. Feel free to reach out to me if you would like to work on this 
-project
+This is a simple to-do list app that is being updated weekly. Use this app to help
+simplify your life and keep your daily tasks organized. Feel free to reach out to me 
+if you would like to work on this project. **Thanks and leave a star if you like it!**
 
-<img src="https://im2.ezgif.com/tmp/ezgif-2-87d82f04be7f.gif" width="400" height="600" />
+## Current Issues
+
+- Stored values are not being show upon opening app, cannot figure out how to accomplish 
+  this without using pull down to refresh
+  
+- Currently the theme settings are not stored as well
+
+## Features to be added
+
+- Extended settings
+
+- Edit existing tasks with long press
+
+- Make tasks reorderable with dragging
+
+
+
 
 ## Getting Started
 
