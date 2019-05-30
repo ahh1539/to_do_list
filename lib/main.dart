@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // this is called when the trailing icon is pressed, it is the functionality that
-  // removes the todo item from the storage and display
+  // removes the to-do item from the storage and display
   _onDeleteItem(String item) {
     _delete(item);
     setState(() {
@@ -115,8 +115,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // this method is used when the user submits a new todo item, it clears
-  // the text box and removes the default todo item
+  // this method is used when the user submits a new to-do item, it clears
+  // the text box and removes the default to-do item
   _onEntered(String s) {
     if (s.isNotEmpty) {
       setState(() {
