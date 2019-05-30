@@ -9,7 +9,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="to_do_list"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/to_do_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
