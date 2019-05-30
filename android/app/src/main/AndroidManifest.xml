@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="to_do_list"
+        android:label="ToDo List"
         android:icon="@mipmap/to_do_icon">
         <activity
             android:name=".MainActivity"
