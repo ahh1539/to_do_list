@@ -4,10 +4,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'SettingsOptions.dart';
 
 void main() => runApp(HomePage());
 
 class HomePage extends StatefulWidget {
+  final String title; // sample var you want to pass to your widget
+  static final navKey = new GlobalKey<NavigatorState>();
+  const HomePage({Key navKey, this.title}) : super(key: navKey);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -27,9 +31,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+      navigatorKey: HomePage.navKey,
       title: "ToDo List",
       theme: current,
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       home: Scaffold(
         key: _scaffoldKey,
         appBar: new AppBar(
@@ -156,18 +161,18 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.red,
           title: Text('Settings'),
         ),
-        body: new ListTile(
-          title: Text('Dark Theme'),
-          trailing: Switch(
-            value: isSwitched,
-            onChanged: (value) {
-              setState(() {
-                isSwitched = value;
-                setTheme();
-              });
+        body: Container(
+          child: ListView.separated(
+            itemCount: SettingsOptions().itemCount(),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: _settingspage(index),
+              );
             },
-            activeTrackColor: Colors.lightGreenAccent,
-            activeColor: Colors.green,
+            separatorBuilder: (context, index) => Divider(
+                  color: Colors.black,
+                ),
           ),
         ),
       );
@@ -207,5 +212,50 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _storedItems = _storedItems;
     });
+  }
+
+  _aboutAction() {
+    showDialog(
+        context: HomePage.navKey.currentState.overlay.context,
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            title: Text('About ToDo List!'),
+            content:
+                Text('ToDo List! is brought to you by Alex Hurley (@ahh1539), '
+                    'The purpose of this app is to help people simplify '
+                    'their daily tasks. I am continualy working on improving '
+                    'this app and would love to get feed back from all'
+                    'of you. Thanks!'),
+          );
+        });
+  }
+
+  _settingspage(int index) {
+    var info = SettingsOptions().sendInfo();
+    if (index == 1) {
+      return ListTile(
+        title: Text("About"),
+        trailing: IconButton(
+            icon: Icon(Icons.info),
+            onPressed: _aboutAction,
+            tooltip: "About app"),
+      );
+    } else {
+      return ListTile(
+        title: Text("Theme"),
+        subtitle: Text("Dark or Regular") ,
+        trailing: Switch(
+          value: isSwitched,
+          onChanged: (value) {
+            setState(() {
+              isSwitched = value;
+              setTheme();
+            });
+          },
+          activeTrackColor: Colors.lightGreenAccent,
+          activeColor: Colors.green,
+        ),
+      );
+    }
   }
 }
