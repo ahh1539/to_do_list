@@ -9,7 +9,7 @@ import 'SettingsOptions.dart';
 void main() => runApp(HomePage());
 
 class HomePage extends StatefulWidget {
-  final String title; // sample var you want to pass to your widget
+  final String title;
   static final navKey = new GlobalKey<NavigatorState>();
   const HomePage({Key navKey, this.title}) : super(key: navKey);
   @override
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
 
   List<String> _storedItems = ["What will you get done today??"];
 
-  // this builds the app, it is made up of the scaffold
+  /// this builds the app, it is made up of the scaffold
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -44,8 +44,8 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: new Container(
-          // adds pull to refresh functionality to the app, underneath is a
-          // verticle scroll bar
+          /// adds pull to refresh functionality to the app, underneath is a
+          /// verticle scroll bar
           child: new RefreshIndicator(
             child: new Scrollbar(
               child: ListView.separated(
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                         _storedItems[index],
                         style: new TextStyle(fontSize: 18.0),
                       ),
-                      // this adds the inkwell effect to the delete icon
+                      /// this adds the inkwell effect to the delete icon
                       trailing: InkWell(
                         child: new IconButton(
                           icon: new Icon(
@@ -93,8 +93,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // when the floating action button is pressed this is the method that is triggered
-  // and handles all of the functionality, it displays a pop up text box for user input
+  /// when the floating action button is pressed this is the method that is triggered
+  /// and handles all of the functionality, it displays a pop up text box for user input
   _onAddItemPressed() {
     _scaffoldKey.currentState.showBottomSheet<Null>((BuildContext context) {
       return new Container(
@@ -111,8 +111,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // this is called when the trailing icon is pressed, it is the functionality that
-  // removes the to-do item from the storage and display
+  /// this is called when the trailing icon is pressed, it is the functionality that
+  /// removes the to-do item from the storage and display
   _onDeleteItem(String item) {
     _delete(item);
     setState(() {
@@ -120,8 +120,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // this method is used when the user submits a new to-do item, it clears
-  // the text box and removes the default to-do item
+  /// this method is used when the user submits a new to-do item, it clears
+  /// the text box and removes the default to-do item
   _onEntered(String s) {
     if (s.isNotEmpty) {
       setState(() {
@@ -134,8 +134,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // this is called when the user changes the theme is the settings
-  // simply changes from light -> dark mode and vice versa
+  /// this is called when the user changes the theme is the settings
+  /// simply changes from light -> dark mode and vice versa
   ThemeData setTheme() {
     if (current == ThemeData.light()) {
       setState(() {
@@ -152,8 +152,8 @@ class _HomePageState extends State<HomePage> {
     return ThemeData.light();
   }
 
-  // this is the method that displays the bottom drawer popup, it builds the content and
-  // displays it to the user, so far it has a switch to change the current theme
+  /// this is the method that displays the bottom drawer popup, it builds the content and
+  /// displays it to the user, so far it has a switch to change the current theme
   void _toSettings() {
     _scaffoldKey.currentState.showBottomSheet<Null>((BuildContext context) {
       return new Scaffold(
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: _settingspage(index),
+                child: _settingsPage(index),
               );
             },
             separatorBuilder: (context, index) => Divider(
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // this method saves the user input data into the local devices storage
+  /// this method saves the user input data into the local devices storage
   _write(String item) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'my_int_key';
@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // this method deletes the given string from the local devices storage
+  /// this method deletes the given string from the local devices storage
   _delete(String s) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'my_int_key';
@@ -206,7 +206,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // this method refreshes the page and is called when the pull to refresh is activated
+  /// this method refreshes the page and is called when the pull to refresh is activated
   Future<void> _refresh() async {
     _write(" ");
     setState(() {
@@ -230,8 +230,10 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  _settingspage(int index) {
-    var info = SettingsOptions().sendInfo();
+  /// This method builds the List tiles for the settings page and adds
+  /// their icon buttons for user interaction
+  _settingsPage(int index) {
+    //var info = SettingsOptions().sendInfo();
     if (index == 1) {
       return ListTile(
         title: Text("About"),
