@@ -1,8 +1,11 @@
+
 # to_do_list
 
 This is a simple to-do list app that is being updated weekly. Use this app to help
 simplify your life and keep your daily tasks organized. Feel free to reach out to me 
 if you would like to work on this project. **Thanks and leave a star if you like it!**
+
+## On the google play store at  https://play.google.com/store/apps/details?id=com.chatapp.to_do_list 
 
 ## Current Issues
 
