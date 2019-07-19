@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                       trailing: InkWell(
                         child: new IconButton(
                           icon: new Icon(
-                            Icons.delete,
+                            Icons.check_box,
                             size: 18.0,
                           ),
                           onPressed: () {
@@ -225,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                     'The purpose of this app is to help people simplify '
                     'their daily tasks. I am continualy working on improving '
                     'this app and would love to get feed back from all'
-                    'of you. Thanks!'),
+                    ' of you. '),
           );
         });
   }
